@@ -33,5 +33,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataContext>();
+SeedData.SeedDatabase(context);
+
 app.Run();
 
