@@ -21,7 +21,4 @@
     <None Remove="Infrastructure\" />
     <None Remove="Microsoft.EntityFrameworkCore" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
 </Project>
