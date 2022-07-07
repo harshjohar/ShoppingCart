@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShoppingCart.Infrastructure.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace ShoppingCart.Models
@@ -24,6 +25,10 @@ namespace ShoppingCart.Models
         public Category Category { get; set; }
 
         public string Image { get; set; } = "noimage.png";
+
+        [NotMapped]
+        [FileExtension]
+        public IFormFile ImageUpload { get; set; }
     }
 }
 
