@@ -33,7 +33,7 @@ namespace ShoppingCart.Controllers
             CartItem cartItem = cart.Where(c => c.ProductId == id).FirstOrDefault();
             if(cartItem==null)
             {
-                cart.Add(cartItem);
+                cart.Add(new CartItem(product));
             }
             else
             {
