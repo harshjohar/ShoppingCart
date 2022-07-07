@@ -20,10 +20,31 @@ namespace ShoppingCart.Controllers
             CartViewModel cartVM = new()
             {
                 CartItems = cart,
-                GrandTotal = cart.Sum(x=>x.Quantity*x.Price),
+                GrandTotal = cart.Sum(x => x.Quantity * x.Price),
             };
 
             return View(cartVM);
+        }
+
+        public async Task<IActionResult> Add(long id)
+        {
+            Product product = await _dataContext.Products.FindAsync(id);
+            List<CartItem> cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            CartItem cartItem = cart.Where(c => c.ProductId == id).FirstOrDefault();
+            if(cartItem==null)
+            {
+                cart.Add(cartItem);
+            }
+            else
+            {
+                cartItem.Quantity += 1;
+            }
+
+            HttpContext.Session.SetJson("Cart", cart);
+
+            TempData["Success"] = "The product has been added";
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }
