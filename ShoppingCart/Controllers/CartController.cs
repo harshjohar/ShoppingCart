@@ -31,7 +31,7 @@ namespace ShoppingCart.Controllers
             Product product = await _dataContext.Products.FindAsync(id);
             List<CartItem> cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             CartItem cartItem = cart.Where(c => c.ProductId == id).FirstOrDefault();
-            if(cartItem==null)
+            if (cartItem == null)
             {
                 cart.Add(new CartItem(product));
             }
@@ -45,6 +45,54 @@ namespace ShoppingCart.Controllers
             TempData["Success"] = "The product has been added";
 
             return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public IActionResult Decrease(long id)
+        {
+            List<CartItem> cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            CartItem cartItem = cart.Where(c => c.ProductId == id).FirstOrDefault();
+            if (cartItem.Quantity > 1)
+            {
+                cartItem.Quantity--;
+            }
+            else
+            {
+                cart.RemoveAll(p => p.ProductId == id);
+            }
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+
+            TempData["Success"] = "The product has been removed";
+            return RedirectToAction("Index");
+        }
+        public IActionResult Remove(long id)
+        {
+            List<CartItem> cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            cart.RemoveAll(p => p.ProductId == id);
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+
+            TempData["Success"] = "The product has been removed";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Clear()
+        {
+            HttpContext.Session.Remove("Cart");
+            
+            return RedirectToAction("Index");
         }
     }
 }
