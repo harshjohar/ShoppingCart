@@ -37,7 +37,6 @@
                 <td>
                     @Model.CartItems.Where(x=>x.ProductId==item.ProductId).Sum(x=>x.Quantity*x.Price).ToString("C2")
                 </td>
-                <td>@item.ProductName</td>
             </tr>
         }
 
